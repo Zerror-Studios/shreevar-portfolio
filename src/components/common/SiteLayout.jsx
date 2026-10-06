@@ -49,9 +49,9 @@ export default function SiteLayout({ children }) {
       <GlobalParaReveal/>
       <GlobalImgReveal/>
 
-        <header>
+        {/* <header>
           <Header />
-        </header>
+        </header> */}
 
         <main>
           {children}
