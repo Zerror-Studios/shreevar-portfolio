@@ -1,8 +1,12 @@
+"use client";
 import React from 'react';
+import { useScroll } from '@/context/ScrollContext';
 
 const Contact = () => {
+    const { contactRef } = useScroll();
+
     return (
-        <section className="w-full relative bg-white text-black py">
+        <section ref={contactRef} className="w-full relative bg-white text-black py">
             <div className="container flex flex-col gapy">
 
                 {/* Top Header */}

@@ -3,10 +3,12 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/dist/ScrollTrigger';
+import { useScroll } from '@/context/ScrollContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const WorkSection = () => {
+    const { workRef } = useScroll();
     const wrapperRef = useRef(null);
     const sectionsRef = useRef([]);
 
@@ -142,7 +144,7 @@ const WorkSection = () => {
     }, [experiences.length]);
 
     return (
-        <>
+        <div ref={workRef}>
             {/* Intro Screen */}
             <section className="w-full h-screen bg-black text-white flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
@@ -223,7 +225,7 @@ const WorkSection = () => {
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

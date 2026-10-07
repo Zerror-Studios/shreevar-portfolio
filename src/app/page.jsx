@@ -5,16 +5,18 @@ import Hero from "@/components/home/Hero";
 import WhatIDo from "@/components/home/WhatIDo";
 import Contact from "@/components/home/Contact";
 import WorkSection from "@/components/home/WorkSection";
+import Stats from "@/components/home/Stats";
 import { createPageMetadata } from "@/lib/seo";
 
 const HomePage = () => {
   return (
     <>
     <Hero />
-    <CurrentChapter/>
+    <Stats />
     <WhatIDo/>
-    <WorkSection/>
+    <CurrentChapter/>
     <About/>
+    <WorkSection/>
     <OutsideWork/>
     <Contact/>
     </>

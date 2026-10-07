@@ -14,6 +14,8 @@ import GlobalImgReveal from "../animation/GlobalImgReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
+import { ScrollProvider } from "@/context/ScrollContext";
+
 export default function SiteLayout({ children }) {
   const pathname = usePathname();
 
@@ -45,23 +47,23 @@ export default function SiteLayout({ children }) {
   return (
     <ViewTransitions>
       <LenisScroll>
+        <ScrollProvider>
+          <GlobalParaReveal/>
+          <GlobalImgReveal/>
 
-      <GlobalParaReveal/>
-      <GlobalImgReveal/>
+          <header>
+            <Header />
+          </header>
 
-        {/* <header>
-          <Header />
-        </header> */}
+          <main>
+            {children}
+          </main>
 
-        <main>
-          {children}
-        </main>
-
-        <footer>
-          <Footer />
-        </footer>
+          <footer>
+            <Footer />
+          </footer>
+        </ScrollProvider>
       </LenisScroll>
     </ViewTransitions>
-
   );
 }

@@ -1,27 +1,29 @@
 import Image from 'next/image'
 import React from 'react'
+import Lanyard from './CardLanyard'
 
 const Hero = () => {
   return (
     <>
       <div className="w-full h-screen relative">
-        <Image fill className=' cover grayscale-100' src={"/images/homepage/hero_bg.png"} alt='hero img' />
-      </div>
 
-      <section className="w-full h-screen bg-black text-white relative flex flex-col justify-center items-center overflow-hidden">
-
-        {/* Main Text Content */}
-        <div className="flex flex-col items-center justify-center z-10 px-6">
-          <h1 data-para-effect className="text-center uppercase">
-            SHREEVAR<br />JHUNJHUNWALA
-          </h1>
-          <p data-para-effect className="mt-8 text-lg text-white/80 text-center ">
-            Building, learning, and expanding —<br />
-            across business, products and new markets.
-          </p>
+        <div className="w-full flex pt-12 text-lg leading-tight absolute! top-0 items-center justify-between container">
+          <p>I build growth, partnerships & <br /> what comes next.</p>
+          <div className="flex items-center gap-x-1">
+            <div className="size-1.5 aspect-square bg-black"></div>
+            <p>Madrid - Mumbai - Building Globally</p>
+          </div>
         </div>
-
-      </section>
+        <Lanyard
+          position={[0, 0, 12]}
+          gravity={[0, -30, 0]}
+          frontImage="/images/homepage/card_front.svg"
+          backImage="/images/homepage/card_back.svg"
+          imageFit="cover"
+          lanyardImage="/icons/lanyard.png"
+          lanyardWidth={0.5}
+        />
+      </div>
     </>
   )
 }
