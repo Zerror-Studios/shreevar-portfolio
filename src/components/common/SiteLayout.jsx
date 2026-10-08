@@ -15,6 +15,7 @@ import GlobalImgReveal from "../animation/GlobalImgReveal";
 gsap.registerPlugin(ScrollTrigger);
 
 import { ScrollProvider } from "@/context/ScrollContext";
+import Preloader from "@/components/common/Preloader";
 
 export default function SiteLayout({ children }) {
   const pathname = usePathname();
@@ -48,6 +49,7 @@ export default function SiteLayout({ children }) {
     <ViewTransitions>
       <LenisScroll>
         <ScrollProvider>
+          {/* <Preloader /> */}
           <GlobalParaReveal/>
           <GlobalImgReveal/>
 

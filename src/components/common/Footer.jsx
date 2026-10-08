@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useRef } from 'react';
 import Matter from 'matter-js';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/dist/ScrollTrigger';
 
 const Footer = () => {
     const sceneRef = useRef(null);
@@ -88,6 +90,11 @@ const Footer = () => {
             Bodies.rectangle(width * 0.3, -1100, 180, 180, opt), // Extra square
         ];
 
+        const initialStates = shapes.map(body => ({
+            x: body.position.x,
+            y: body.position.y
+        }));
+
         // handle cursor changes based on physics hover
         Events.on(mouseConstraint, 'mousemove', function (event) {
             const foundPhysics = Query.point(shapes, event.mouse.position);
@@ -116,17 +123,38 @@ const Footer = () => {
             }
         });
 
-        // Drop shapes when footer comes into view
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                Composite.add(world, shapes);
-                observer.disconnect();
-            }
-        }, { threshold: 0.1 });
+        // Drop shapes everytime footer comes into view using ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+        let shapesAdded = false;
 
-        if (sceneRef.current) {
-            observer.observe(sceneRef.current);
-        }
+        const trigger = ScrollTrigger.create({
+            trigger: sceneRef.current,
+            start: "top 80%",
+            onEnter: () => {
+                if (!shapesAdded) {
+                    Composite.add(world, shapes);
+                    shapesAdded = true;
+                } else {
+                    shapes.forEach((body, index) => {
+                        Matter.Body.setPosition(body, initialStates[index]);
+                        Matter.Body.setVelocity(body, { x: 0, y: 0 });
+                        Matter.Body.setAngularVelocity(body, 0);
+                    });
+                }
+            },
+            onEnterBack: () => {
+                if (!shapesAdded) {
+                    Composite.add(world, shapes);
+                    shapesAdded = true;
+                } else {
+                    shapes.forEach((body, index) => {
+                        Matter.Body.setPosition(body, initialStates[index]);
+                        Matter.Body.setVelocity(body, { x: 0, y: 0 });
+                        Matter.Body.setAngularVelocity(body, 0);
+                    });
+                }
+            }
+        });
 
         // handle resize
         const handleResize = () => {
@@ -149,7 +177,7 @@ const Footer = () => {
         // cleanup
         return () => {
             window.removeEventListener('resize', handleResize);
-            observer.disconnect();
+            if (trigger) trigger.kill();
             Render.stop(render);
             Runner.stop(runner);
             if (render.canvas) render.canvas.remove();

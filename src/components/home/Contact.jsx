@@ -1,12 +1,35 @@
 "use client";
 import React from 'react';
 import { useScroll } from '@/context/ScrollContext';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import ScrollTrigger from 'gsap/dist/ScrollTrigger';
 
 const Contact = () => {
     const { contactRef } = useScroll();
 
+    useGSAP(() => {
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.set(".contact-circle", { y: -400 });
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: contactRef.current,
+                start: "top 60%",
+                toggleActions:"play none none reverse"
+            }
+        });
+
+        tl.to(".contact-circle", {
+            y: 0,
+            duration: 1.5,
+            ease: "bounce.out"
+        }, 0.2);
+    }, { scope: contactRef });
+
     return (
-        <section ref={contactRef} className="w-full relative bg-white text-black py">
+        <section ref={contactRef} className="w-full relative bg-white text-black py overflow-hidden">
             <div className="container flex flex-col gapy">
 
                 {/* Top Header */}
@@ -29,13 +52,13 @@ const Contact = () => {
                         {/* Geometric Shape */}
                         <svg
                             viewBox="0 0 200 220"
-                            className="w-48 h-auto md:w-72"
+                            className="w-48 h-auto md:w-72 overflow-visible"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
                         >
-                            <circle cx="100" cy="50" r="35" fill="black" />
-                            <path d="M 20 85 H 180 A 80 80 0 0 1 20 85 Z" fill="black" />
-                            <path d="M 100 165 L 60 215 H 140 Z" fill="black" />
+                            <circle className="contact-circle" cx="100" cy="50" r="35" fill="black" />
+                            <path className="contact-semicircle" d="M 20 85 H 180 A 80 80 0 0 1 20 85 Z" fill="black" />
+                            <path className="contact-triangle" d="M 100 165 L 60 215 H 140 Z" fill="black" />
                         </svg>
                     </div>
 

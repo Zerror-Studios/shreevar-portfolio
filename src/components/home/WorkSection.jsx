@@ -3,23 +3,17 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/dist/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import { useScroll } from '@/context/ScrollContext';
-
-gsap.registerPlugin(ScrollTrigger);
-
-const WorkSection = () => {
-    const { workRef } = useScroll();
-    const wrapperRef = useRef(null);
-    const sectionsRef = useRef([]);
 
     const experiences = [
         {
             id: 1,
-            zIndex:40,
+            zIndex: 40,
             year: "2025—26",
             title: "BUILDING THE\nBUSINESS SIDE OF THE\nSTUDIO.",
-            image: "images/homepage/work/zerror.svg", 
-            logo: "images/homepage/work/zerror-logo.svg", 
+            image: "images/homepage/work/zerror.svg",
+            logo: "images/homepage/work/zerror-logo.svg",
             roles: [
                 {
                     num: "01",
@@ -40,7 +34,7 @@ const WorkSection = () => {
         },
         {
             id: 2,
-            zIndex:30,
+            zIndex: 30,
             year: "2024—25",
             title: "TURNING STRATEGY\nINTO GROWTH.",
             image: "images/homepage/work/disrptve.svg",
@@ -65,7 +59,7 @@ const WorkSection = () => {
         },
         {
             id: 3,
-            zIndex:20,
+            zIndex: 20,
             year: "2023—24",
             title: "CONNECTING BRANDS\nWITH LIVE CULTURE.",
             image: "images/homepage/work/bookmyshow.svg",
@@ -90,7 +84,7 @@ const WorkSection = () => {
         },
         {
             id: 4,
-            zIndex:10,
+            zIndex: 10,
             year: "2022—23",
             title: "BRINGING ART INTO\nWEB3.",
             image: "/images/homepage/work/heftyart.svg",
@@ -114,6 +108,61 @@ const WorkSection = () => {
             ]
         }
     ];
+    
+const WorkSection = () => {
+    const { workRef, aboutRef } = useScroll();
+    const wrapperRef = useRef(null);
+    const sectionsRef = useRef([]);
+
+    useGSAP(() => {
+        const aboutShapes = document.querySelectorAll('.about-totem-shape');
+        const targets = document.querySelectorAll('.work-target');
+
+        if (!aboutShapes.length || !targets.length) return;
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: workRef.current,
+                start: "top bottom",
+                end: "top top",
+                scrub: 1,
+            }
+        });
+
+        aboutShapes.forEach((shape, i) => {
+            if (!shape || !targets[i]) return;
+
+            const shapeRect = shape.getBoundingClientRect();
+            const targetRect = targets[i].getBoundingClientRect();
+
+            const shapeCenterX = shapeRect.left + shapeRect.width / 2;
+            const shapeCenterY = shapeRect.top + shapeRect.height / 2;
+
+            const targetCenterX = targetRect.left + targetRect.width / 2;
+            const targetCenterY = targetRect.top + targetRect.height / 2;
+
+            const deltaX = targetCenterX - shapeCenterX;
+            const deltaY = targetCenterY - shapeCenterY;
+            const scale = targetRect.width / shapeRect.width;
+
+            tl.to(shape, {
+                x: deltaX,
+                y: deltaY,
+                scale: scale,
+                rotation: 360,
+                duration: 1,
+                ease: "power1.inOut"
+            }, 0);
+        });
+
+        ScrollTrigger.create({
+            trigger: workRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            pin: ".about-totem-stack",
+            pinSpacing: false,
+        });
+    }, { dependencies: [] });
 
     useEffect(() => {
         if (!wrapperRef.current) return;
@@ -128,8 +177,6 @@ const WorkSection = () => {
                 }
             });
 
-            // Animate each section's clip-path from bottom up
-            // except the last one (zIndex: 10, index: 3) which stays static at the bottom
             sectionsRef.current.forEach((section, index) => {
                 if (index < experiences.length - 1) {
                     tl.to(section, {
@@ -144,53 +191,53 @@ const WorkSection = () => {
     }, [experiences.length]);
 
     return (
-        <div ref={workRef}>
+        <div ref={workRef} className='w-full relative '>
             {/* Intro Screen */}
-            <section className="w-full h-screen bg-black text-white flex flex-col items-center justify-center">
+            <section className="w-full h-screen sticky top-0 bg-black  text-white flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
                     <h2 data-para-effect className="uppercase text-center">
                         WHERE I'VE WORKED?
                     </h2>
-                    
-                    {/* Geometric Shapes */}
+
+                    {/* Geometric Shapes Targets */}
                     <div className="flex items-center justify-center gap-6 mt-4">
-                        <div className="w-8 h-8 rounded-full border-2 border-white"></div>
-                        <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[10px] border-b-white"></div>
-                        <div className="w-8 h-8 border-2 border-white"></div>
+                        <div className="work-target w-8 h-8"></div>
+                        <div className="work-target w-8 h-8"></div>
+                        <div className="work-target w-8 h-8"></div>
                     </div>
                 </div>
             </section>
 
             {/* Experience Screens Pinned Wrapper */}
-            <div ref={wrapperRef} className="relative w-full h-[400vh]">
-                
+            <div ref={wrapperRef} className="relative w-full h-[400vh] z-[60]">
+
                 {/* Sticky Container */}
                 <div className="sticky top-0 w-full h-screen bg-black overflow-hidden">
                     {experiences.map((exp, index) => (
-                        <section 
-                            key={exp.id} 
+                        <section
+                            key={exp.id}
                             ref={(el) => (sectionsRef.current[index] = el)}
                             className="absolute inset-0 w-full  h-full py-12 bg-black  text-white flex items-center"
-                            style={{ 
+                            style={{
                                 zIndex: exp.zIndex,
                                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
                             }}
                         >
                             <div className="container grid grid-cols-1 md:grid-cols-2">
-                                
+
                                 {/* Left: Image Column */}
                                 <div data-img-effect className="w-full h-full relative bg-zinc-900 flex items-center justify-center overflow-hidden">
-                                    <Image 
-                                        fill 
-                                        src={exp.image} 
-                                        alt={`Work at ${exp.id}`} 
-                                        className="object-cover opacity-80" 
+                                    <Image
+                                        fill
+                                        src={exp.image}
+                                        alt={`Work at ${exp.id}`}
+                                        className="object-cover opacity-80"
                                     />
                                 </div>
 
                                 {/* Right: Content Column */}
                                 <div className="flex flex-col justify-center md:pl-8 h-full">
-                                    
+
                                     {/* Top Info */}
                                     <div className="flex justify-between items-start mb-12 md:mb-16">
                                         <h2 className=" leading-none">{exp.id}</h2>
@@ -201,7 +248,7 @@ const WorkSection = () => {
                                     <h2 data-para-effect className="uppercase  mb-12 md:mb-16">
                                         {exp.title.split('\n').map((line, i) => (
                                             <React.Fragment key={i}>
-                                                {line}<br/>
+                                                {line}<br />
                                             </React.Fragment>
                                         ))}
                                     </h2>
