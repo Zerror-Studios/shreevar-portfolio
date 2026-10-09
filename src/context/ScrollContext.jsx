@@ -10,7 +10,7 @@ export const ScrollProvider = ({ children }) => {
   const aboutRef = useRef(null);
   const contactRef = useRef(null);
 
-  const scrollToSection = (refName) => {
+  const scrollToSection = (refName, immediate = false) => {
     let targetRef;
     switch (refName) {
       case 'expertise': targetRef = expertiseRef; break;
@@ -23,9 +23,9 @@ export const ScrollProvider = ({ children }) => {
 
     if (targetRef && targetRef.current) {
       if (window.lenis) {
-        window.lenis.scrollTo(targetRef.current, { duration: 1.2 });
+        window.lenis.scrollTo(targetRef.current, immediate ? { immediate: true } : { duration: 1.2 });
       } else {
-        targetRef.current.scrollIntoView({ behavior: "smooth" });
+        targetRef.current.scrollIntoView({ behavior: immediate ? "auto" : "smooth" });
       }
     }
   };

@@ -11,7 +11,7 @@ import { useScroll } from '@/context/ScrollContext';
             id: 1,
             zIndex: 40,
             year: "2025—26",
-            title: "BUILDING THE\nBUSINESS SIDE OF THE\nSTUDIO.",
+            title: "BUILDING THE BUSINESS\n SIDE OF THE STUDIO.",
             image: "images/homepage/work/zerror.svg",
             logo: "images/homepage/work/zerror-logo.svg",
             roles: [
@@ -173,7 +173,7 @@ const WorkSection = () => {
                     trigger: wrapperRef.current,
                     start: "top top",
                     end: "bottom bottom",
-                    scrub: 1, // Smooth scrub
+                    scrub: true, // Smooth scrub
                 }
             });
 
@@ -181,7 +181,7 @@ const WorkSection = () => {
                 if (index < experiences.length - 1) {
                     tl.to(section, {
                         clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
-                        ease: "none"
+                        ease: "linear"
                     });
                 }
             });
@@ -209,7 +209,7 @@ const WorkSection = () => {
             </section>
 
             {/* Experience Screens Pinned Wrapper */}
-            <div ref={wrapperRef} className="relative w-full h-[400vh] z-[60]">
+            <div ref={wrapperRef} className="relative w-full h-[400vh] z-[100000]">
 
                 {/* Sticky Container */}
                 <div className="sticky top-0 w-full h-screen bg-black overflow-hidden">
@@ -223,10 +223,10 @@ const WorkSection = () => {
                                 clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
                             }}
                         >
-                            <div className="container grid grid-cols-1 md:grid-cols-2">
+                            <div className="container h-full flex flex-col md:grid md:grid-cols-2 ">
 
                                 {/* Left: Image Column */}
-                                <div data-img-effect className="w-full h-full relative bg-zinc-900 flex items-center justify-center overflow-hidden">
+                                <div className="w-full flex-1 min-h-0 md:h-full relative bg-zinc-900 flex items-center justify-center overflow-hidden">
                                     <Image
                                         fill
                                         src={exp.image}
@@ -236,16 +236,16 @@ const WorkSection = () => {
                                 </div>
 
                                 {/* Right: Content Column */}
-                                <div className="flex flex-col justify-center md:pl-8 h-full">
+                                <div className="md:flex flex-col justify-center max-sm:space-y-4 max-sm:mt-5 md:pl-8 md:h-full">
 
                                     {/* Top Info */}
-                                    <div className="flex justify-between items-start mb-12 md:mb-16">
+                                    <div className="flex justify-between items-start md:mb-16">
                                         <h2 className=" leading-none">{exp.id}</h2>
                                         <span className="text-white/60 text-sm md:text-base pt-2">{exp.year}</span>
                                     </div>
 
                                     {/* Heading */}
-                                    <h2 data-para-effect className="uppercase  mb-12 md:mb-16">
+                                    <h2 data-para-effect className="uppercase  md:mb-16">
                                         {exp.title.split('\n').map((line, i) => (
                                             <React.Fragment key={i}>
                                                 {line}<br />

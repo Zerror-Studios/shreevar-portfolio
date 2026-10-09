@@ -19,7 +19,7 @@ export default function LenisScroll({ children }) {
     const instance = new Lenis({
       smooth: !0,
       lerp: .1,
-      wheelMultiplier: .7,
+      wheelMultiplier: .6,
       gestureOrientation: "vertical",
       normalizeWheel: !1,
       smoothTouch: !1

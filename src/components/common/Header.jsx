@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useScroll } from '@/context/ScrollContext';
+import gsap from 'gsap';
 
 const NAV_ITEMS = [
   { key: 'expertise', label: 'EXPERTISE' },
@@ -12,12 +13,14 @@ const NAV_ITEMS = [
 
 const Header = () => {
   const { scrollToSection } = useScroll();
+  const wrapperRef = useRef(null);
   const containerRef = useRef(null);
   const contactBtnRef = useRef(null);
   const navRefs = useRef({});
   
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, height: 0, top: 0, opacity: 0 });
   const [hoveredItem, setHoveredItem] = useState('contact'); // default highlight on contact
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const moveIndicatorTo = (el) => {
     if (el && containerRef.current) {
@@ -41,6 +44,14 @@ const Header = () => {
   useEffect(() => {
     const timer = setTimeout(resetIndicator, 100);
     window.addEventListener('resize', resetIndicator);
+
+    // Header reveal animation after 4 seconds
+    gsap.fromTo(
+      wrapperRef.current,
+      { xPercent: -50, y: 100, opacity: 0 },
+      { xPercent: -50, y: 0, opacity: 1, duration: 1, delay: 4, ease: 'power3.out' }
+    );
+
     return () => {
       clearTimeout(timer);
       window.removeEventListener('resize', resetIndicator);
@@ -57,12 +68,32 @@ const Header = () => {
     moveIndicatorTo(contactBtnRef.current);
   };
 
+  const handleNavClick = (key) => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    
+    // Fast fade in takes 200ms
+    setTimeout(() => {
+      scrollToSection(key, true);
+      
+      // Wait a moment then fade out
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 100);
+    }, 300);
+  };
+
   return (
-    <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50">
+    <>
+      {/* White transition overlay */}
+      <div 
+        className={`fixed inset-0 bg-white z-1000 pointer-events-none transition-opacity duration-300  ${isTransitioning ? 'opacity-100' : 'opacity-0'}`}
+      />
+      <div ref={wrapperRef} className="fixed bottom-5 left-1/2 z-100000 opacity-0">
       <div 
         ref={containerRef}
         onMouseLeave={resetIndicator}
-        className="relative flex items-center gap-6 bg-[#0a0a0a] text-white pl-1 pr-1 py-1 rounded-md border border-white/50"
+        className="relative flex items-center  bg-[#0a0a0a] text-white pl-1 pr-1 py-1 rounded-md border border-white/50"
       >
         {/* Sliding Indicator */}
         <div 
@@ -77,17 +108,21 @@ const Header = () => {
           }}
         />
 
-        <nav className="flex items-center gap-4 text-sm relative z-10">
+        <nav className="flex items-center text-sm relative z-10">
           {NAV_ITEMS.map(({ key, label }) => (
             <button
               key={key}
               ref={(el) => (navRefs.current[key] = el)}
               onMouseEnter={() => handleNavHover(key)}
-              onClick={() => scrollToSection(key)}
-              className="px-3 py-3 uppercase text-sm transition-colors duration-300"
+              onClick={() => handleNavClick(key)}
+              className="group px-3 py-3 uppercase text-sm transition-colors duration-300"
               style={{ color: hoveredItem === key ? '#000' : '#fff' }}
             >
-              {label}
+              <span className="relative inline-block">
+                {label}
+                {/* Underline that grows from left and shrinks to right */}
+                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-current origin-right scale-x-0 transition-transform duration-300 ease-out group-hover:origin-left group-hover:scale-x-100" />
+              </span>
             </button>
           ))}
         </nav>
@@ -95,8 +130,8 @@ const Header = () => {
         <button 
           ref={contactBtnRef}
           onMouseEnter={handleContactHover}
-          onClick={() => scrollToSection('contact')}
-          className="flex items-center gap-3 pl-2 pr-5 py-2 rounded-sm ml-2 sm:ml-4 relative z-10 transition-colors duration-300"
+          onClick={() => handleNavClick('contact')}
+          className="group flex items-center gap-3 pl-2 pr-5 py-2 rounded-sm relative z-10 transition-colors duration-300"
         >
           <div className="w-7 h-7 rounded-full overflow-hidden relative bg-gray-300 flex-shrink-0">
             <Image 
@@ -107,14 +142,16 @@ const Header = () => {
             />
           </div>
           <span 
-            className="text-sm whitespace-nowrap transition-colors duration-300"
+            className="relative inline-block text-sm whitespace-nowrap transition-colors duration-300"
             style={{ color: hoveredItem === 'contact' ? '#000' : '#fff' }}
           >
             LET'S TALK
+            <span className="absolute bottom-0 left-0 w-full h-[1px] bg-current origin-right scale-x-0 transition-transform duration-300 ease-out group-hover:origin-left group-hover:scale-x-100" />
           </span>
         </button>
       </div>
     </div>
+    </>
   );
 }
 

@@ -75,19 +75,23 @@ const Footer = () => {
         Composite.add(world, mouseConstraint);
         render.mouse = mouse;
 
-        // the shapes to drop (Increased size and count to 10)
+        // the shapes to drop (scaled for mobile)
         const opt = { render: { fillStyle: '#ffffff' }, friction: 0.5, restitution: 0.6 };
+        
+        // Scale based on screen size (roughly 20rem for mobile, 30rem+ for tablet/desktop)
+        const scale = window.innerWidth < 768 ? 0.5 : window.innerWidth < 1024 ? 0.8 : 1;
+
         const shapes = [
-            Bodies.circle(width * 0.3, -200, 130, opt), // Large circle
-            Bodies.circle(width * 0.6, -400, 90, opt), // Small circle
-            Bodies.rectangle(width * 0.7, -300, 200, 200, opt), // Square
-            Bodies.polygon(width * 0.8, -600, 3, 160, opt), // Large triangle
-            Bodies.polygon(width * 0.2, -500, 3, 120, opt), // Small triangle
-            Bodies.rectangle(width * 0.4, -700, 260, 120, opt), // Rectangle
-            Bodies.circle(width * 0.5, -800, 100, opt), // Medium circle
-            Bodies.polygon(width * 0.5, -900, 3, 150, opt), // Extra triangle
-            Bodies.circle(width * 0.8, -1000, 110, opt), // Extra circle
-            Bodies.rectangle(width * 0.3, -1100, 180, 180, opt), // Extra square
+            Bodies.circle(width * 0.3, -200, 130 * scale, opt), // Large circle
+            Bodies.circle(width * 0.6, -400, 90 * scale, opt), // Small circle
+            Bodies.rectangle(width * 0.7, -300, 200 * scale, 200 * scale, opt), // Square
+            Bodies.polygon(width * 0.8, -600, 3, 160 * scale, opt), // Large triangle
+            Bodies.polygon(width * 0.2, -500, 3, 120 * scale, opt), // Small triangle
+            Bodies.rectangle(width * 0.4, -700, 260 * scale, 120 * scale, opt), // Rectangle
+            Bodies.circle(width * 0.5, -800, 100 * scale, opt), // Medium circle
+            Bodies.polygon(width * 0.5, -900, 3, 150 * scale, opt), // Extra triangle
+            Bodies.circle(width * 0.8, -1000, 110 * scale, opt), // Extra circle
+            Bodies.rectangle(width * 0.3, -1100, 180 * scale, 180 * scale, opt), // Extra square
         ];
 
         const initialStates = shapes.map(body => ({
@@ -205,10 +209,13 @@ const Footer = () => {
                         <p className="text-white/80">
                             Building what's next, one partnership at a time.
                         </p>
+                    <p className="text-xs text-white/50 mt-2 uppercase">
+                        © Shreevar Jhunjhunwala, 2026. All rights reserved.
+                    </p>
                     </div>
 
                     {/* Right: Links */}
-                    <div className="pointer-events-auto flex gap-16 md:gap-24 uppercase font-medium">
+                    <div className="pointer-events-auto grid grid-cols-2 md:flex gap-0 md:gap-24 uppercase font-medium">
                         <div className="flex flex-col gap-2">
                             <span className="text-white/50 text-sm mb-2">SITE</span>
                             <a href="#" className="hover:text-white/80 transition-colors">WORK</a>
@@ -223,13 +230,7 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Bottom Section */}
-                <div className="pointer-events-auto">
-                    <p className="text-xs text-white/50 uppercase">
-                        © Shreevar Jhunjhunwala, 2026. All rights reserved.
-                    </p>
-                </div>
+            
                 
             </div>
         </footer>

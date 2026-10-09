@@ -9,10 +9,7 @@ const CountUp = ({ end, prefix = "", suffix = "", duration = 2 }) => {
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.disconnect();
-                }
+                setIsVisible(entry.isIntersecting);
             },
             { threshold: 0.1 }
         );
@@ -25,9 +22,14 @@ const CountUp = ({ end, prefix = "", suffix = "", duration = 2 }) => {
     }, []);
 
     useEffect(() => {
-        if (!isVisible) return;
+        if (!isVisible) {
+            setCount(0);
+            return;
+        }
 
         let startTimestamp = null;
+        let animationFrameId;
+
         const step = (timestamp) => {
             if (!startTimestamp) startTimestamp = timestamp;
             const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1);
@@ -38,11 +40,17 @@ const CountUp = ({ end, prefix = "", suffix = "", duration = 2 }) => {
             setCount(Math.floor(easeProgress * end));
 
             if (progress < 1) {
-                window.requestAnimationFrame(step);
+                animationFrameId = window.requestAnimationFrame(step);
             }
         };
 
-        window.requestAnimationFrame(step);
+        animationFrameId = window.requestAnimationFrame(step);
+
+        return () => {
+            if (animationFrameId) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
+        };
     }, [end, duration, isVisible]);
 
     return (
@@ -83,11 +91,11 @@ const Stats = () => {
     return (
         <section className="w-full relative bg-black text-white pt">
             <div className="container">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/20 border border-white/20">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-[1px] bg-white/20 border border-white/20">
                     
                     {statsData.map((stat, index) => (
-                        <div key={index} className="flex flex-col justify-center items-center text-center p-10 md:p-14 bg-black text-white hover:bg-white hover:text-black transition-colors duration-300 group">
-                            <h2  className="text-7xl! mb-4">
+                        <div key={index} className="md:flex flex-col justify-center items-center md:text-center p-5 md:p-14 bg-black text-white hover:bg-white hover:text-black transition-colors duration-300 group">
+                            <h2  className=" text-4xl! md:text-7xl! mb-4">
                                 <CountUp end={stat.end} prefix={stat.prefix} suffix={stat.suffix} />
                             </h2>
                             <p className="text-sm md:text-base leading-tight max-w-[250px] opacity-80">

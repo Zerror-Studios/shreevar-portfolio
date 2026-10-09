@@ -53,11 +53,14 @@ const GlobalParaReveal = () => {
           willChange: "transform, opacity",
         })
 
+        const delay = el.dataset.delay ? parseFloat(el.dataset.delay) : 0
+
         gsap.to(split.lines, {
           yPercent: -6,
           duration: 1,
           stagger: 0.1,
           ease: "power4.out",
+          delay: delay,
 
           scrollTrigger: {
             trigger: el,

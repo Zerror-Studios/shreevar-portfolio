@@ -60,7 +60,7 @@ const WhatIDo = () => {
             <div className="container flex flex-col gapy">
 
                 {/* Top Header Grid */}
-                <div className="grid grid-cols-7">
+                <div className=" max-sm:space-y-3 md:grid grid-cols-7">
                     <div className='col-span-5'>
                         <h2 data-para-effect>WHAT I DO</h2>
                     </div>
@@ -72,12 +72,12 @@ const WhatIDo = () => {
                 </div>
 
                 {/* Main Content Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
 
                     <div className="hidden md:block"></div>
 
                     {/* Item 1: Growth */}
-                    <div className="bg-white text-black  aspect-square p-6 md:p-8 flex flex-col justify-between ">
+                    <div className="bg-white text-black  aspect-4/3 md:aspect-square p-6 md:p-8 flex flex-col justify-between ">
                         <div className="w-full flex-1 center relative mb-8 what-i-do-target h-32">
                             {/* Target for Growth Shape */}
                         </div>
@@ -88,7 +88,7 @@ const WhatIDo = () => {
                     </div>
 
                     {/* Item 2: Partnerships */}
-                    <div className="bg-white text-black  aspect-square p-6 md:p-8 flex flex-col justify-between ">
+                    <div className="bg-white text-black  aspect-4/3 md:aspect-square p-6 md:p-8 flex flex-col justify-between ">
                         <div className="w-full flex-1 center relative mb-8 what-i-do-target h-32">
                             {/* Target for Partnerships Shape */}
                         </div>
@@ -99,7 +99,7 @@ const WhatIDo = () => {
                     </div>
 
                     {/* Item 3: New Ventures */}
-                    <div className="bg-white text-black  aspect-square p-6 md:p-8 flex flex-col justify-between ">
+                    <div className="bg-white text-black  aspect-4/3 md:aspect-square p-6 md:p-8 flex flex-col justify-between ">
                         <div className="w-full flex-1 center relative mb-8 what-i-do-target h-32">
                             {/* Target for New Ventures Shape */}
                         </div>
@@ -110,7 +110,7 @@ const WhatIDo = () => {
                     </div>
 
                     {/* Item 4: Execution */}
-                    <div className="bg-white text-black  aspect-square p-6 md:p-8 flex flex-col justify-between ">
+                    <div className="bg-white text-black  aspect-4/3 md:aspect-square p-6 md:p-8 flex flex-col justify-between ">
                         <div className="w-full flex-1 center relative mb-8 what-i-do-target h-32">
                             {/* Target for Execution Shape */}
                         </div>

@@ -32,36 +32,56 @@ button {
   max-width: 1920px;
   margin-inline: auto;
 }
+
+.pt {
+  padding-top: 4rem;
+}
+.pb {
+  padding-bottom: 4rem;
+}
+.py {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+.mt {
+  margin-top: 4rem;
+}
+.mb {
+  margin-bottom: 4rem;
+}
+.gapy {
+  row-gap: 2rem;
+}
 @media (min-width: 750px) {
   .padding,
   .container {
     padding-inline: 3rem;
+  }
+
+  .pt {
+    padding-top: 6rem;
+  }
+  .pb {
+    padding-bottom: 6rem;
+  }
+  .py {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+  .mt {
+    margin-top: 6rem;
+  }
+  .mb {
+    margin-bottom: 6rem;
+  }
+  .gapy {
+    row-gap: 4rem;
   }
 }
 .cover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.pt {
-  padding-top: 6rem;
-}
-.pb {
-  padding-bottom: 6rem;
-}
-.py{
-    padding-top: 6rem;
-  padding-bottom: 6rem;
-}
-.mt {
-  margin-top: 6rem;
-}
-.mb {
-  margin-bottom: 6rem;
-}
-.gapy{
-  row-gap: 4rem;
 }
 
 input:-webkit-autofill,
