@@ -60,7 +60,7 @@ const Hero = () => {
       <div className="w-full h-screen relative bg-white">
 
         <div className="w-full md:flex  pt-12 text-lg leading-tight absolute! top-0 items-center justify-between container">
-          <p data-para-effect data-delay="4" className='md:w-60'>I build growth, partnerships & what comes next.</p>
+          <h1 data-para-effect data-delay="4" className='md:w-60 text-lg! font-normal! leading-tight'>I build growth, partnerships & what comes next.</h1>
           <div className="flex items-center gap-x-1">
             <div className="size-1.5 aspect-square bg-black" data-para-effect data-delay="4"></div>
             <p data-para-effect data-delay="4">Madrid - Mumbai - Building Globally</p>

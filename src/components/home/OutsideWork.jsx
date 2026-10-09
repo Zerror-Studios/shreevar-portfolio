@@ -186,7 +186,7 @@ const OutsideWork = () => {
                                     <div className={` hidden md:block absolute w-10 transition-all origin-right bg-white rounded-full -left-12 opacity-80 h-[2px] ${i === activeIndex ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-50'}`}></div>
                                     <div className={` md:hidden absolute w-full  transition-all origin-left bg-white rounded-full left-0 -bottom-2 opacity-80 h-[2px] ${i === activeIndex ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-50'}`}></div>
                                     <div className="w-full h-full overflow-hidden">
-                                    <img className={`cover transition-all ${i === activeIndex ? 'scale-110' : 'group-hover:scale-105'}`} src={item.image} alt="" />
+                                    <img className={`cover transition-all ${i === activeIndex ? 'scale-110' : 'group-hover:scale-105'}`} src={item.image} alt="work img thumbnail" />
                                     </div>
                                 </div>
                             ))}

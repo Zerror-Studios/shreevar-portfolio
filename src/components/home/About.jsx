@@ -12,9 +12,9 @@ const About = () => {
                 
                 {/* Top Header */}
                 <div className="w-full md:w-[95%] lg:w-[90%] mb-4 md:mb-8">
-                    <h2 data-para-effect className="uppercase">
-                        I’m Shreevar, Building at the <br className="hidden md:block"/>
-                        intersection of Strategy, <br className="hidden md:block"/>
+                    <h2 data-para-effect className="uppercase md:w-3xl">
+                        I’m Shreevar, Building at the 
+                        intersection of Strategy, 
                         Culture & Technology.
                     </h2>
                 </div>

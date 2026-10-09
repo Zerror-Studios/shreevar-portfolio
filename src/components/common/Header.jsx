@@ -89,11 +89,11 @@ const Header = () => {
       <div 
         className={`fixed inset-0 bg-white z-1000 pointer-events-none transition-opacity duration-300  ${isTransitioning ? 'opacity-100' : 'opacity-0'}`}
       />
-      <div ref={wrapperRef} className="fixed bottom-5 left-1/2 z-100000 opacity-0">
+      <div ref={wrapperRef} className="fixed bottom-5 left-1/2 z-100000 opacity-0 w-full padding md:w-max md:p-0">
       <div 
         ref={containerRef}
         onMouseLeave={resetIndicator}
-        className="relative flex items-center  bg-[#0a0a0a] text-white pl-1 pr-1 py-1 rounded-md border border-white/50"
+        className="relative flex items-center justify-between w-full bg-[#0a0a0a] text-white p-1 rounded-md border border-white/50"
       >
         {/* Sliding Indicator */}
         <div 
@@ -108,14 +108,14 @@ const Header = () => {
           }}
         />
 
-        <nav className="flex items-center text-sm relative z-10">
+        <nav className="flex items-center justify-between flex-1 md:flex-none text-sm relative z-10">
           {NAV_ITEMS.map(({ key, label }) => (
             <button
               key={key}
               ref={(el) => (navRefs.current[key] = el)}
               onMouseEnter={() => handleNavHover(key)}
               onClick={() => handleNavClick(key)}
-              className="group px-3 py-3 uppercase text-sm transition-colors duration-300"
+              className="group max-md:px-1 px-3 py-3 uppercase max-md:text-xs text-sm transition-colors duration-300"
               style={{ color: hoveredItem === key ? '#000' : '#fff' }}
             >
               <span className="relative inline-block">
@@ -131,9 +131,9 @@ const Header = () => {
           ref={contactBtnRef}
           onMouseEnter={handleContactHover}
           onClick={() => handleNavClick('contact')}
-          className="group flex items-center gap-3 pl-2 pr-5 py-2 rounded-sm relative z-10 transition-colors duration-300"
+          className="group flex items-center gap-1 md:gap-3 max-md:px-2 pl-2 pr-5 py-2 rounded-sm relative z-10 transition-colors duration-300 ml-1 md:ml-0"
         >
-          <div className="w-7 h-7 rounded-full overflow-hidden relative bg-gray-300 flex-shrink-0">
+          <div className="w-5 h-5 md:w-7 md:h-7 rounded-full overflow-hidden relative bg-gray-300 flex-shrink-0">
             <Image 
               src="/images/homepage/about_pic.svg" 
               alt="Profile" 
@@ -142,7 +142,7 @@ const Header = () => {
             />
           </div>
           <span 
-            className="relative inline-block text-sm whitespace-nowrap transition-colors duration-300"
+            className="relative inline-block max-md:text-[10px] text-sm whitespace-nowrap transition-colors duration-300"
             style={{ color: hoveredItem === 'contact' ? '#000' : '#fff' }}
           >
             LET'S TALK

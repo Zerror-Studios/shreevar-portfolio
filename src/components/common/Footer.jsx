@@ -1,11 +1,30 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Matter from 'matter-js';
+import { useScroll } from '@/context/ScrollContext';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/dist/ScrollTrigger';
 
 const Footer = () => {
     const sceneRef = useRef(null);
+    const { scrollToSection } = useScroll();
+    const [isTransitioning, setIsTransitioning] = useState(false);
+
+    const handleNavClick = (e, key) => {
+        e.preventDefault();
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+        
+        // Fast fade in takes 200ms
+        setTimeout(() => {
+            scrollToSection(key, true);
+            
+            // Wait a moment then fade out
+            setTimeout(() => {
+                setIsTransitioning(false);
+            }, 100);
+        }, 300);
+    };
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -77,9 +96,10 @@ const Footer = () => {
 
         // the shapes to drop (scaled for mobile)
         const opt = { render: { fillStyle: '#ffffff' }, friction: 0.5, restitution: 0.6 };
-        
-        // Scale based on screen size (roughly 20rem for mobile, 30rem+ for tablet/desktop)
-        const scale = window.innerWidth < 768 ? 0.5 : window.innerWidth < 1024 ? 0.8 : 1;
+
+        // Dynamically scale shapes based on the actual container width for a smoother transition
+        // On a 390px mobile screen, scale will be around 0.27
+        const scale = Math.max(0.25, width / 1440);
 
         const shapes = [
             Bodies.circle(width * 0.3, -200, 130 * scale, opt), // Large circle
@@ -165,7 +185,7 @@ const Footer = () => {
             if (!sceneRef.current) return;
             const newWidth = sceneRef.current.clientWidth;
             const newHeight = sceneRef.current.clientHeight;
-            
+
             render.canvas.width = newWidth;
             render.canvas.height = newHeight;
             render.options.width = newWidth;
@@ -190,16 +210,21 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer className="w-full h-screen relative bg-black text-white overflow-hidden">
+        <>
+            {/* White transition overlay */}
+            <div 
+                className={`fixed inset-0 bg-white z-[999999] pointer-events-none transition-opacity duration-300 ${isTransitioning ? 'opacity-100' : 'opacity-0'}`}
+            />
+            <footer className="w-full  md:h-screen relative bg-black text-white overflow-hidden z-100000">
             {/* Matter.js Canvas Container */}
-            <div ref={sceneRef} className="absolute inset-0 z-0" />
+            <div ref={sceneRef} className="absolute hidden md:block inset-0 z-0" />
 
             {/* Content Container */}
             <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between container pt pb">
-                
+
                 {/* Top Section */}
                 <div className="flex flex-col md:flex-row justify-between gap-12">
-                    
+
                     {/* Left: Branding */}
                     <div className="pointer-events-auto">
                         <h2 data-para-effect className="uppercase mb-2">
@@ -209,18 +234,18 @@ const Footer = () => {
                         <p className="text-white/80">
                             Building what's next, one partnership at a time.
                         </p>
-                    <p className="text-xs text-white/50 mt-2 uppercase">
-                        © Shreevar Jhunjhunwala, 2026. All rights reserved.
-                    </p>
+                        <p className="text-xs text-white/50 mt-2 uppercase">
+                            © Shreevar Jhunjhunwala, 2026. All rights reserved.
+                        </p>
                     </div>
 
                     {/* Right: Links */}
                     <div className="pointer-events-auto grid grid-cols-2 md:flex gap-0 md:gap-24 uppercase font-medium">
                         <div className="flex flex-col gap-2">
                             <span className="text-white/50 text-sm mb-2">SITE</span>
-                            <a href="#" className="hover:text-white/80 transition-colors">WORK</a>
-                            <a href="#" className="hover:text-white/80 transition-colors">ABOUT</a>
-                            <a href="#" className="hover:text-white/80 transition-colors">CONTACT</a>
+                            <a href="#" onClick={(e) => handleNavClick(e, 'work')} className="hover:text-white/80 transition-colors">WORK</a>
+                            <a href="#" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-white/80 transition-colors">ABOUT</a>
+                            <a href="#" onClick={(e) => handleNavClick(e, 'contact')} className="hover:text-white/80 transition-colors">CONTACT</a>
                         </div>
                         <div className="flex flex-col gap-2">
                             <span className="text-white/50 text-sm mb-2">SOCIALS</span>
@@ -230,10 +255,11 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-            
-                
+
+
             </div>
         </footer>
+        </>
     );
 };
 

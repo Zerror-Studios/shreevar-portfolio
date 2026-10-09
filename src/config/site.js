@@ -1,55 +1,44 @@
 export const siteConfig = {
-  name: "Website Name",
-  description: "Website description",
-  url: "http://localhost:3000/",
-  locale: "en_IN",
-  language: "en-IN",
+  name: "Shreevar Jhunjhunwala Portfolio",
+  description: "Building at the intersection of Strategy, Culture & Technology.",
+  url: "http://shreevarjhunjhunwala.com",
+  locale: "en_US",
+  language: "en-US",
   ogImage: "/og.png",
   keywords: [
-    "",
-    "",
-    "",
-    "",
+    "Shreevar Jhunjhunwala",
+    "Portfolio",
+    "Strategy",
+    "Culture",
+    "Technology",
+    "Zcom",
+    "Madrid"
   ],
   contact: {
     phone: "",
-    email: "",
+    email: "hello@shreevarjhunjhunwala.com",
   },
   address: {
     street: "",
-    city: "",
-    state: "",
+    city: "Madrid",
+    state: "Madrid",
     postalCode: "",
-    country: "IN",
+    country: "Spain",
   },
   socials: {
     facebook: "",
-    instagram: "",
+    instagram: "https://instagram.com",
     twitter: "",
-    linkedin: "",
+    linkedin: "https://linkedin.com/in/shreevarjhunjhunwala",
   },
 };
 
 export const siteRoutes = [
   {
     path: "/",
-    label: "Home",
-    title: "Home",
+    label: "Shreevar Jhunjhunwala Portfolio",
+    title: "Shreevar Jhunjhunwala Portfolio",
     description: siteConfig.description,
     priority: 1,
-  },
-  {
-    path: "/about",
-    label: "About",
-    title: "About",
-    description: "",
-    priority: 0.8,
-  },
-  {
-    path: "/contact",
-    label: "Contact",
-    title: "Contact",
-    description: "",
-    priority: 0.7,
-  },
+  }
 ];
