@@ -49,7 +49,6 @@ export default function SiteLayout({ children }) {
     <ViewTransitions>
       <LenisScroll>
         <ScrollProvider>
-          <Preloader />
           <GlobalParaReveal/>
           <GlobalImgReveal/>
 

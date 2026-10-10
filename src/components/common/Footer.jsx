@@ -14,11 +14,11 @@ const Footer = () => {
         e.preventDefault();
         if (isTransitioning) return;
         setIsTransitioning(true);
-        
+
         // Fast fade in takes 200ms
         setTimeout(() => {
             scrollToSection(key, true);
-            
+
             // Wait a moment then fade out
             setTimeout(() => {
                 setIsTransitioning(false);
@@ -212,53 +212,51 @@ const Footer = () => {
     return (
         <>
             {/* White transition overlay */}
-            <div 
+            <div
                 className={`fixed inset-0 bg-white z-[999999] pointer-events-none transition-opacity duration-300 ${isTransitioning ? 'opacity-100' : 'opacity-0'}`}
             />
             <footer className="w-full  md:h-screen relative bg-black text-white overflow-hidden z-100000">
-            {/* Matter.js Canvas Container */}
-            <div ref={sceneRef} className="absolute hidden md:block inset-0 z-0" />
+                {/* Matter.js Canvas Container */}
+                <div ref={sceneRef} className="absolute hidden md:block inset-0 z-0" />
 
-            {/* Content Container */}
-            <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between container pt pb">
+                {/* Content Container */}
+                <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between container pt pb">
 
-                {/* Top Section */}
-                <div className="flex flex-col md:flex-row justify-between gap-12">
+                    {/* Top Section */}
+                    <div className="flex flex-col md:flex-row justify-between gap-12">
 
-                    {/* Left: Branding */}
-                    <div className="pointer-events-auto">
-                        <h2 data-para-effect className="uppercase mb-2">
-                            SHREEVAR <br />
-                            JHUNJHUNWALA
-                        </h2>
-                        <p className="text-white/80">
-                            Building what's next, one partnership at a time.
-                        </p>
+                        {/* Left: Branding */}
+                        <div className="pointer-events-auto">
+                            <img className=' w-full md:w-[30vw]' src="/logo.svg" alt="" />
+                        <p className='text-xs md:hidden text-white/50 mt-5 uppercase'>[ Building what's next, one partnership at a time. ]</p>
+                        </div>
+
+                        {/* Right: Links */}
+                        <div className="pointer-events-auto grid grid-cols-2 md:flex gap-0 md:gap-24 uppercase font-medium">
+                            <div className="flex flex-col gap-2">
+                                <span className="text-white/50 text-sm mb-2">SITE</span>
+                                <a href="#" onClick={(e) => handleNavClick(e, 'work')} className="hover:text-white/80 transition-colors">WORK</a>
+                                <a href="#" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-white/80 transition-colors">ABOUT</a>
+                                <a href="#" onClick={(e) => handleNavClick(e, 'contact')} className="hover:text-white/80 transition-colors">CONTACT</a>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <span className="text-white/50 text-sm mb-2">SOCIALS</span>
+                                <a href="#" className="hover:text-white/80 transition-colors">LINKEDIN</a>
+                                <a href="#" className="hover:text-white/80 transition-colors">EMAIL</a>
+                                <a href="#" className="hover:text-white/80 transition-colors">INSTAGRAM</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-full md:flex justify-between mt-5">
+                        <p className='text-xs hidden md:block text-white/50 mt-2 uppercase'>[ Building what's next, one partnership at a time. ]</p>
                         <p className="text-xs text-white/50 mt-2 uppercase">
                             © Shreevar Jhunjhunwala, 2026. All rights reserved.
                         </p>
                     </div>
 
-                    {/* Right: Links */}
-                    <div className="pointer-events-auto grid grid-cols-2 md:flex gap-0 md:gap-24 uppercase font-medium">
-                        <div className="flex flex-col gap-2">
-                            <span className="text-white/50 text-sm mb-2">SITE</span>
-                            <a href="#" onClick={(e) => handleNavClick(e, 'work')} className="hover:text-white/80 transition-colors">WORK</a>
-                            <a href="#" onClick={(e) => handleNavClick(e, 'about')} className="hover:text-white/80 transition-colors">ABOUT</a>
-                            <a href="#" onClick={(e) => handleNavClick(e, 'contact')} className="hover:text-white/80 transition-colors">CONTACT</a>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <span className="text-white/50 text-sm mb-2">SOCIALS</span>
-                            <a href="#" className="hover:text-white/80 transition-colors">LINKEDIN</a>
-                            <a href="#" className="hover:text-white/80 transition-colors">EMAIL</a>
-                            <a href="#" className="hover:text-white/80 transition-colors">INSTAGRAM</a>
-                        </div>
-                    </div>
+
                 </div>
-
-
-            </div>
-        </footer>
+            </footer>
         </>
     );
 };

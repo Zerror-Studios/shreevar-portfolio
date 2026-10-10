@@ -374,12 +374,6 @@ const LiquidTransitionMesh = ({ currentImageIndex, images }) => {
   return (
     <mesh
       ref={meshRef}
-      onPointerEnter={() => {
-        isHovered.current = true;
-      }}
-      onPointerLeave={() => {
-        isHovered.current = false;
-      }}
     >
       {/* 64x64 subdivision grid for authentic 3D vertex wave displacement */}
       <planeGeometry args={[viewport.width, viewport.height, 64, 64]} />

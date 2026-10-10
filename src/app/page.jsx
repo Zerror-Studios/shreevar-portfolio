@@ -16,8 +16,8 @@ const HomePage = () => {
     <WhatIDo/>
     <CurrentChapter/>
     <About/>
-    <WorkSection/>
     <OutsideWork/>
+    <WorkSection/>
     <Contact/>
     </>
   );

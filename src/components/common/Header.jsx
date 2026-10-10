@@ -3,6 +3,9 @@ import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useScroll } from '@/context/ScrollContext';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const NAV_ITEMS = [
   { key: 'expertise', label: 'EXPERTISE' },
@@ -45,16 +48,26 @@ const Header = () => {
     const timer = setTimeout(resetIndicator, 100);
     window.addEventListener('resize', resetIndicator);
 
-    // Header reveal animation after 4 seconds
-    gsap.fromTo(
+    // Header reveal animation on scroll
+    const anim = gsap.to(
       wrapperRef.current,
-      { xPercent: -50, y: 100, opacity: 0 },
-      { xPercent: -50, y: 0, opacity: 1, duration: 1, delay: 4, ease: 'power3.out' }
+      { 
+      bottom:"1.25rem",
+        duration: 1, 
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: document.body,
+          start: "100px top",
+          toggleActions: "play none none reverse"
+        }
+      }
     );
 
     return () => {
       clearTimeout(timer);
       window.removeEventListener('resize', resetIndicator);
+      if (anim.scrollTrigger) anim.scrollTrigger.kill();
+      anim.kill();
     };
   }, []);
 
@@ -89,7 +102,7 @@ const Header = () => {
       <div 
         className={`fixed inset-0 bg-white z-1000 pointer-events-none transition-opacity duration-300  ${isTransitioning ? 'opacity-100' : 'opacity-0'}`}
       />
-      <div ref={wrapperRef} className="fixed bottom-5 left-1/2 z-100000 opacity-0 w-full padding md:w-max md:p-0">
+      <div ref={wrapperRef} className="fixed -bottom-full left-1/2 -translate-x-1/2  z-100000 w-full padding md:w-max md:p-0">
       <div 
         ref={containerRef}
         onMouseLeave={resetIndicator}

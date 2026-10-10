@@ -1,10 +1,14 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/dist/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useScroll } from '@/context/ScrollContext';
+import { SplitText } from 'gsap/SplitText';
+import RippleImage from './RippleImage';
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
     const experiences = [
         {
@@ -107,12 +111,19 @@ import { useScroll } from '@/context/ScrollContext';
                 }
             ]
         }
-    ];
+];
+
+const WORK_IMAGES = experiences.map(exp => exp.image);
     
 const WorkSection = () => {
     const { workRef, aboutRef } = useScroll();
     const wrapperRef = useRef(null);
+    const contentContainerRef = useRef(null);
     const sectionsRef = useRef([]);
+
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [displayedIndex, setDisplayedIndex] = useState(0);
+    const isFirstMount = useRef(true);
 
     useGSAP(() => {
         const aboutShapes = document.querySelectorAll('.about-totem-shape');
@@ -164,31 +175,123 @@ const WorkSection = () => {
         });
     }, { dependencies: [] });
 
-    useEffect(() => {
+    // Track scroll progress to update activeIndex
+    useGSAP(() => {
         if (!wrapperRef.current) return;
+        
+        ScrollTrigger.create({
+            trigger: wrapperRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self) => {
+                const progress = self.progress;
+                let index = Math.floor(progress * experiences.length);
+                if (index >= experiences.length) index = experiences.length - 1;
+                setActiveIndex(prev => prev !== index ? index : prev);
+            }
+        });
+    }, { scope: wrapperRef });
 
-        let ctx = gsap.context(() => {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: wrapperRef.current,
-                    start: "top top",
-                    end: "bottom bottom",
-                    scrub: true, // Smooth scrub
+    // Animate OUT old content, then update displayedIndex
+    useEffect(() => {
+        if (isFirstMount.current) {
+            isFirstMount.current = false;
+            return;
+        }
+
+        if (activeIndex === displayedIndex) return;
+
+        const container = contentContainerRef.current;
+        const currentLines = container ? container.querySelectorAll('.split-line') : [];
+
+        if (currentLines.length > 0) {
+            gsap.killTweensOf(currentLines);
+            gsap.to(currentLines, {
+                yPercent: -105,
+                opacity: 0,
+                duration: 0.35,
+                stagger: 0.03,
+                ease: "power3.in",
+                onComplete: () => {
+                    setDisplayedIndex(activeIndex);
                 }
             });
+        } else {
+            setDisplayedIndex(activeIndex);
+        }
+    }, [activeIndex, displayedIndex]);
 
-            sectionsRef.current.forEach((section, index) => {
-                if (index < experiences.length - 1) {
-                    tl.to(section, {
-                        clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
-                        ease: "linear"
-                    });
-                }
+    // Animate IN new content with data-para-effect (SplitText + line masking)
+    useEffect(() => {
+        const container = contentContainerRef.current;
+        if (!container) return;
+
+        let splits = [];
+        let isCancelled = false;
+
+        const runReveal = async () => {
+            if (typeof document !== 'undefined' && document.fonts) {
+                await document.fonts.ready;
+            }
+            if (isCancelled || !contentContainerRef.current) return;
+
+            const targets = contentContainerRef.current.querySelectorAll('.para-split');
+            const allLines = [];
+
+            targets.forEach((el) => {
+                const split = new SplitText(el, {
+                    type: "lines",
+                    linesClass: "split-line",
+                    aria: "none",
+                });
+                splits.push(split);
+
+                split.lines.forEach((line) => {
+                    const wrapper = document.createElement("div");
+                    wrapper.style.overflow = "hidden";
+                    line.parentNode.insertBefore(wrapper, line);
+                    wrapper.appendChild(line);
+                    allLines.push(line);
+                });
             });
-        }, wrapperRef);
 
-        return () => ctx.revert();
-    }, [experiences.length]);
+            gsap.set(allLines, {
+                yPercent: 100,
+                opacity: 0,
+                transformOrigin: "center top",
+                transformStyle: "preserve-3d",
+                willChange: "transform, opacity",
+            });
+
+            gsap.to(allLines, {
+                yPercent: -6,
+                opacity: 1,
+                duration: 0.9,
+                stagger: 0.08,
+                ease: "power4.out"
+            });
+        };
+
+        runReveal();
+
+        return () => {
+            isCancelled = true;
+            splits.forEach(s => s.revert());
+        };
+    }, [displayedIndex]);
+
+    useGSAP(()=>{
+        gsap.to(".inner_bar",{
+            width:"100%",
+            ease:"none",
+            scrollTrigger:{
+                trigger:wrapperRef.current,
+                start:"top top",
+                end:"bottom bottom",
+                scrub:true
+            }
+        })
+    })
 
     return (
         <div ref={workRef} className='w-full relative '>
@@ -212,64 +315,60 @@ const WorkSection = () => {
             <div ref={wrapperRef} className="relative w-full h-[400vh] z-[100000]">
 
                 {/* Sticky Container */}
-                <div className="sticky top-0 w-full h-screen bg-black overflow-hidden">
-                    {experiences.map((exp, index) => (
-                        <section
-                            key={exp.id}
-                            ref={(el) => (sectionsRef.current[index] = el)}
-                            className="absolute inset-0 w-full  h-full py-12 bg-black  text-white flex items-center"
-                            style={{
-                                zIndex: exp.zIndex,
-                                clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
-                            }}
-                        >
-                            <div className="container h-full flex flex-col md:grid md:grid-cols-2 ">
+                <div className="sticky top-0 w-full h-screen bg-black overflow-hidden flex items-center">
 
-                                {/* Left: Image Column */}
-                                <div className="w-full flex-1 min-h-0 md:h-full relative bg-zinc-900 flex items-center justify-center overflow-hidden">
-                                    <Image
-                                        fill
-                                        src={exp.image}
-                                        alt={`Work at ${exp.id}`}
-                                        className="object-cover opacity-80"
-                                    />
-                                </div>
+                        <div className="bar  bg-white/20 h-[2px] w-[50%] md:w-[20%] overflow-hidden rounded-full absolute bottom-5 left-1/2 -translate-x-1/2">
+                        <div className="inner_bar w-0 bg-white h-full"></div>
+                        </div>
 
-                                {/* Right: Content Column */}
-                                <div className="md:flex flex-col justify-center max-sm:space-y-4 max-sm:mt-5 md:pl-8 md:h-full">
-
-                                    {/* Top Info */}
-                                    <div className="flex justify-between items-start md:mb-16">
-                                        <h2 className=" leading-none">{exp.id}</h2>
-                                        <span className="text-white/60 text-sm md:text-base pt-2">{exp.year}</span>
-                                    </div>
-
-                                    {/* Heading */}
-                                    <h2 data-para-effect className="uppercase  md:mb-16">
-                                        {exp.title.split('\n').map((line, i) => (
-                                            <React.Fragment key={i}>
-                                                {line}<br />
-                                            </React.Fragment>
-                                        ))}
-                                    </h2>
-
-                                    {/* Roles List */}
-                                    <div className="flex flex-col">
-                                        {exp.roles.map((role, idx) => (
-                                            <div key={idx} className={`flex gap-8 py-6 ${idx !== 0 ? 'border-t border-white/10' : ''}`}>
-                                                <h4 className="text-white/80 leading-none  w-6">{role.num}</h4>
-                                                <div className="flex flex-col gap-1">
-                                                    <h5 className="uppercase ">{role.name}</h5>
-                                                    <p className="text-white/60 text-sm md:text-base max-w-[90%]">{role.desc}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
+                    <div className="container h-full py-12 flex flex-col md:grid md:grid-cols-2">
+                        
+                        {/* Left: RippleImage Column */}
+                        <div className="w-full flex-1 min-h-0 md:h-full relative bg-zinc-900 flex items-center justify-center overflow-hidden">
+                            <div className="w-full h-full relative">
+                                <RippleImage images={WORK_IMAGES} currentIndex={activeIndex} />
                             </div>
-                        </section>
-                    ))}
+                        </div>
+
+                        {/* Right: Content Column */}
+                        <div ref={contentContainerRef} className="md:flex flex-col justify-center max-sm:space-y-4 max-sm:mt-5 md:pl-8 md:h-full text-white">
+                            {(() => {
+                                const exp = experiences[displayedIndex];
+                                return (
+                                    <div key={displayedIndex} className="flex flex-col justify-center h-full">
+                                        {/* Top Info */}
+                                        <div className="flex justify-between items-start md:mb-16">
+                                            <h2 className="para-split leading-none">0{exp.id}</h2>
+                                            <span className="para-split text-white/60 text-sm md:text-base pt-2">{exp.year}</span>
+                                        </div>
+
+                                        {/* Heading */}
+                                        <h2 className="para-split uppercase md:mb-16">
+                                            {exp.title.split('\n').map((line, i) => (
+                                                <React.Fragment key={i}>
+                                                    {line}<br />
+                                                </React.Fragment>
+                                            ))}
+                                        </h2>
+
+                                        {/* Roles List */}
+                                        <div className="flex flex-col">
+                                            {exp.roles.map((role, idx) => (
+                                                <div key={idx} className={`flex gap-8 py-6 ${idx !== 0 ? 'border-t border-white/10' : ''}`}>
+                                                    <h4 className="para-split text-white/80 leading-none w-10">{role.num}</h4>
+                                                    <div className="flex flex-col gap-1">
+                                                        <h5 className="para-split uppercase">{role.name}</h5>
+                                                        <p className="para-split text-white/60 text-sm md:text-base">{role.desc}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            })()}
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>

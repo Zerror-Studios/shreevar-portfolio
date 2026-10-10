@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "Shreevar Jhunjhunwala Portfolio",
+  name: "Shreevar Jhunjhunwala ",
   description: "Building at the intersection of Strategy, Culture & Technology.",
   url: "http://shreevarjhunjhunwala.com",
   locale: "en_US",
@@ -16,7 +16,7 @@ export const siteConfig = {
   ],
   contact: {
     phone: "",
-    email: "hello@shreevarjhunjhunwala.com",
+    email: "",
   },
   address: {
     street: "",
@@ -27,17 +27,17 @@ export const siteConfig = {
   },
   socials: {
     facebook: "",
-    instagram: "https://instagram.com",
+    instagram: "",
     twitter: "",
-    linkedin: "https://linkedin.com/in/shreevarjhunjhunwala",
+    linkedin: "",
   },
 };
 
 export const siteRoutes = [
   {
     path: "/",
-    label: "Shreevar Jhunjhunwala Portfolio",
-    title: "Shreevar Jhunjhunwala Portfolio",
+    label: "Shreevar Jhunjhunwala ",
+    title: "Shreevar Jhunjhunwala ",
     description: siteConfig.description,
     priority: 1,
   }

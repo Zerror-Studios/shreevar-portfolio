@@ -65,7 +65,7 @@ const WhatIDo = () => {
                         <h2 data-para-effect>WHAT I DO</h2>
                     </div>
                     <div className="col-span-2">
-                        <p className="text-white/80 text-lg leading-tight">
+                        <p data-para-effect className="text-white/80 text-lg leading-tight">
                             I build the connection between an idea and what comes next.
                         </p>
                     </div>
