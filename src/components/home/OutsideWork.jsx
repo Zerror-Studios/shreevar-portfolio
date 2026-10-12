@@ -20,8 +20,8 @@ const OutsideWork = () => {
         },
         {
             title: "DRUMS / MUSIC",
-            desc1: "College Band",
-            desc2: "Performed at 5+ inter-collegiate cultural festivals across Mumbai.",
+            desc1: "Enjoys music, plays drums",
+            desc2: "A passion for rhythm, live music, and getting behind the drums.",
             image: "/images/homepage/outsidework/music.svg"
         },
         {

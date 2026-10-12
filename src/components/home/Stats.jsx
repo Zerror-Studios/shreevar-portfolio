@@ -78,12 +78,6 @@ const statsData = [
         prefix: "",
         suffix: "+",
         text: "Artists onboarded into the Web3 ecosystem"
-    },
-    {
-        end: 750,
-        prefix: "",
-        suffix: "k+",
-        text: "People reached across 15+ concerts & festivals"
     }
 ];
 
@@ -91,10 +85,10 @@ const Stats = () => {
     return (
         <section className="w-full relative bg-black text-white pt">
             <div className="container">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-[1px] bg-white/20 border border-white/20">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-[1px] bg-white/20 border border-white/20">
                     
                     {statsData.map((stat, index) => (
-                        <div key={index} className="md:flex flex-col justify-center items-center md:text-center p-5 md:p-14 bg-black text-white hover:bg-white hover:text-black transition-colors duration-300 group">
+                        <div key={index} className="last:col-span-2 md:last:col-span-1 md:flex flex-col justify-center items-center md:text-center p-5 md:p-14 bg-black text-white hover:bg-white hover:text-black transition-colors duration-300 group">
                             <h2  className=" text-4xl! md:text-7xl! mb-4">
                                 <CountUp end={stat.end} prefix={stat.prefix} suffix={stat.suffix} />
                             </h2>
